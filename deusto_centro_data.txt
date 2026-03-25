@@ -1,0 +1,18 @@
+#TIENDAS
+1,Supermercado
+P,101,Manzana,1.50,200
+P,102,Leche,2.30,50
+2,Farmacia
+P,201,Paracetamol,4.99,30
+3,Libreria
+P,301,Cuaderno,2.50,100
+P,302,Boligrafo,1.20,150
+
+#CINE
+1,El Padrino,1,20:00,5,8
+R,2,5
+R,3,5
+2,Interestellar,2,17:30,6,10
+R,1,1
+R,1,2
+3,Toy Story,3,16:00,4,6
