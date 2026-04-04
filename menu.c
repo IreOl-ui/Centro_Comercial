@@ -4,7 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define ARCHIVO_DATOS "deusto_centro_data.txt"
+/* Ruta de la BD — se inicializa desde main.c mediante g_db_path */
+extern const char* g_db_path;
 
 static void limpiar_pantalla() {
     system("cls"); 
@@ -76,7 +77,7 @@ void menu_principal(CentroComercial* cc) {
                 menu_gestion_cine(cc);
                 break;
             case 4:
-                if (guardar_datos(cc, ARCHIVO_DATOS)) {
+                if (guardar_datos(cc, g_db_path)) {
                     printf("\nDatos guardados correctamente.\n");
                 } else {
                     printf("\nError al guardar los datos.\n");
@@ -122,6 +123,7 @@ void menu_gestion_tiendas(CentroComercial* cc) {
                 Tienda* tienda = tienda_crear(id, nombre);
                 if (tienda != NULL && cc_agregarTienda(cc, tienda)) {
                     printf("\n¡Tienda '%s' añadida con éxito!\n", nombre);
+                    guardar_datos(cc, g_db_path);
                 } else {
                     printf("\nError: Ya existe una tienda con ID %d o memoria insuficiente.\n", id);
                     if (tienda != NULL) tienda_liberar(tienda);
@@ -144,6 +146,7 @@ void menu_gestion_tiendas(CentroComercial* cc) {
                 
                 if (cc_eliminarTienda(cc, id)) {
                     printf("\nTienda eliminada correctamente.\n");
+                    guardar_datos(cc, g_db_path);
                 } else {
                     printf("\nError: No se encontró tienda con ID %d.\n", id);
                 }
@@ -221,6 +224,7 @@ void menu_gestion_inventario(CentroComercial* cc) {
                 if (producto != NULL && tienda_aniadirProducto(tienda, producto)) {
                     printf("\n¡Producto '%s' añadido a la tienda '%s' con éxito!\n", 
                            nombre, tienda->nombre);
+                    guardar_datos(cc, g_db_path);
                 } else {
                     printf("\nError: Ya existe un producto con ID %d en esta tienda.\n", id);
                     if (producto != NULL) producto_liberar(producto);
@@ -243,6 +247,7 @@ void menu_gestion_inventario(CentroComercial* cc) {
                 
                 if (tienda_eliminarProducto(tienda, id)) {
                     printf("\nProducto eliminado correctamente.\n");
+                    guardar_datos(cc, g_db_path);
                 } else {
                     printf("\nError: No se encontró producto con ID %d.\n", id);
                 }
@@ -282,6 +287,7 @@ void menu_gestion_inventario(CentroComercial* cc) {
                 
                 if (tienda_modificarProducto(tienda, id, nuevoPrecio, nuevoStock)) {
                     printf("\nProducto modificado correctamente.\n");
+                    guardar_datos(cc, g_db_path);
                 } else {
                     printf("\nError al modificar el producto.\n");
                 }
@@ -359,6 +365,7 @@ void menu_gestion_cine(CentroComercial* cc) {
                 Pelicula* pelicula = pelicula_crear(id, titulo, sala, horario, filas, columnas);
                 if (pelicula != NULL && cc_agregarPelicula(cc, pelicula)) {
                     printf("\n¡Película '%s' añadida a la cartelera con éxito!\n", titulo);
+                    guardar_datos(cc, g_db_path);
                 } else {
                     printf("\nError: Ya existe una película en la sala %d a las %s.\n", sala, horario);
                     if (pelicula != NULL) pelicula_liberar(pelicula);
@@ -381,6 +388,7 @@ void menu_gestion_cine(CentroComercial* cc) {
                 
                 if (cc_eliminarPelicula(cc, id)) {
                     printf("\nPelícula eliminada correctamente.\n");
+                    guardar_datos(cc, g_db_path);
                 } else {
                     printf("\nError: No se encontró película con ID %d.\n", id);
                 }
@@ -416,6 +424,7 @@ void menu_gestion_cine(CentroComercial* cc) {
                 
                 if (pelicula_reservarAsiento(pelicula, fila - 1, columna - 1)) {
                     printf("\nAsiento (%d,%d) reservado correctamente.\n", fila, columna);
+                    guardar_datos(cc, g_db_path);
                 } else {
                     printf("\nError: Asiento ya ocupado o coordenadas inválidas.\n");
                 }
