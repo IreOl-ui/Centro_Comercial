@@ -1,4 +1,5 @@
 ADMIN_USER=admin
 ADMIN_PASS=1234
 DB_PATH=deusto_centro_data.db
+LOG_PATH=deusto_centro.log
 MAX_INTENTOS=3

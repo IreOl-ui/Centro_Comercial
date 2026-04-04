@@ -7,6 +7,7 @@ typedef struct {
     char admin_user[50];
     char admin_pass[50];
     char db_path[256];
+    char log_path[256];
     int  max_intentos;
 } Config;
 
