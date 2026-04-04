@@ -1,6 +1,7 @@
 #include "centro_comercial.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 CentroComercial* cc_crear(void) {
     CentroComercial* cc = (CentroComercial*)malloc(sizeof(CentroComercial));
