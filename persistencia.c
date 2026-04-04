@@ -1,13 +1,4 @@
-/*
- * persistencia.c  —  Implementación con SQLite3
- *
- * Compilar junto al resto del proyecto añadiendo sqlite3.c:
- *
- *   gcc main.c centro_comercial.c tienda.c producto.c pelicula.c \
- *       menu.c persistencia.c sqlite3.c -o deusto_centro
- *
- * (no hace falta -lsqlite3 porque se compila el amalgam directamente)
- */
+
 
 #include "persistencia.h"
 #include "sqlite3.h"
@@ -16,12 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* ------------------------------------------------------------------ */
-/*  Helpers internos                                                    */
-/* ------------------------------------------------------------------ */
 
-/* Ejecuta SQL sin resultados dentro de una transacción ya abierta.
- * Devuelve 1 si ok, 0 si error (imprime el mensaje). */
 static int ejecutar_sql(sqlite3* db, const char* sql) {
     char* err = NULL;
     if (sqlite3_exec(db, sql, NULL, NULL, &err) != SQLITE_OK) {
@@ -32,7 +18,7 @@ static int ejecutar_sql(sqlite3* db, const char* sql) {
     return 1;
 }
 
-/* Crea las cuatro tablas si no existen todavía. */
+//Crea las cuatro tablas si no existen todavía.
 static int crear_tablas(sqlite3* db) {
     const char* ddl =
         "CREATE TABLE IF NOT EXISTS tiendas ("
@@ -67,14 +53,11 @@ static int crear_tablas(sqlite3* db) {
     return ejecutar_sql(db, ddl);
 }
 
-/* ------------------------------------------------------------------ */
-/*  cargar_datos                                                        */
-/* ------------------------------------------------------------------ */
+//cargar_datos
 
 int cargar_datos(CentroComercial* cc, const char* filename) {
     sqlite3* db = NULL;
 
-    /* Intentar abrir; si el fichero no existe sqlite3_open lo crea vacío */
     if (sqlite3_open(filename, &db) != SQLITE_OK) {
         fprintf(stderr, "[persistencia] No se pudo abrir '%s': %s\n",
                 filename, sqlite3_errmsg(db));
@@ -82,14 +65,14 @@ int cargar_datos(CentroComercial* cc, const char* filename) {
         return 0;
     }
 
-    /* Activar claves foráneas y crear tablas si hacen falta */
+
     ejecutar_sql(db, "PRAGMA foreign_keys = ON;");
     if (!crear_tablas(db)) {
         sqlite3_close(db);
         return 0;
     }
 
-    /* ---- Cargar tiendas ------------------------------------------ */
+    //Cargar tiendas 
     {
         sqlite3_stmt* stmt = NULL;
         const char* sql = "SELECT id, nombre FROM tiendas ORDER BY id;";
@@ -114,7 +97,7 @@ int cargar_datos(CentroComercial* cc, const char* filename) {
         sqlite3_finalize(stmt);
     }
 
-    /* ---- Cargar productos ----------------------------------------- */
+    //Cargar productos 
     {
         sqlite3_stmt* stmt = NULL;
         const char* sql =
@@ -151,7 +134,7 @@ int cargar_datos(CentroComercial* cc, const char* filename) {
         sqlite3_finalize(stmt);
     }
 
-    /* ---- Cargar películas ----------------------------------------- */
+    //Cargar películas 
     {
         sqlite3_stmt* stmt = NULL;
         const char* sql =
@@ -182,10 +165,10 @@ int cargar_datos(CentroComercial* cc, const char* filename) {
         sqlite3_finalize(stmt);
     }
 
-    /* ---- Cargar reservas ------------------------------------------ */
+    //Cargar reservas
     {
         sqlite3_stmt* stmt = NULL;
-        /* Las filas/columnas se guardaron ya en 0-indexado */
+
         const char* sql =
             "SELECT id_pelicula, fila, columna FROM reservas;";
 
@@ -213,9 +196,8 @@ int cargar_datos(CentroComercial* cc, const char* filename) {
     return 1;
 }
 
-/* ------------------------------------------------------------------ */
-/*  guardar_datos                                                       */
-/* ------------------------------------------------------------------ */
+
+//guardar_datos
 
 int guardar_datos(const CentroComercial* cc, const char* filename) {
     sqlite3* db = NULL;
@@ -233,19 +215,18 @@ int guardar_datos(const CentroComercial* cc, const char* filename) {
         return 0;
     }
 
-    /* Todo dentro de una única transacción para atomicidad y velocidad */
     if (!ejecutar_sql(db, "BEGIN TRANSACTION;")) {
         sqlite3_close(db);
         return 0;
     }
 
-    /* Limpiar datos anteriores (orden inverso por FK) */
+
     ejecutar_sql(db, "DELETE FROM reservas;");
     ejecutar_sql(db, "DELETE FROM productos;");
     ejecutar_sql(db, "DELETE FROM peliculas;");
     ejecutar_sql(db, "DELETE FROM tiendas;");
 
-    /* ---- Guardar tiendas ------------------------------------------ */
+    //Guardar tiendas
     {
         sqlite3_stmt* stmt = NULL;
         const char* sql =
@@ -273,7 +254,7 @@ int guardar_datos(const CentroComercial* cc, const char* filename) {
         sqlite3_finalize(stmt);
     }
 
-    /* ---- Guardar productos ---------------------------------------- */
+    // Guardar productos 
     {
         sqlite3_stmt* stmt = NULL;
         const char* sql =
@@ -308,7 +289,7 @@ int guardar_datos(const CentroComercial* cc, const char* filename) {
         sqlite3_finalize(stmt);
     }
 
-    /* ---- Guardar películas ---------------------------------------- */
+    // Guardar películas 
     {
         sqlite3_stmt* stmt = NULL;
         const char* sql =
@@ -341,7 +322,7 @@ int guardar_datos(const CentroComercial* cc, const char* filename) {
         sqlite3_finalize(stmt);
     }
 
-    /* ---- Guardar reservas ----------------------------------------- */
+    //Guardar reservas 
     {
         sqlite3_stmt* stmt = NULL;
         /* Guardamos en 0-indexado (coherente con pelicula_reservarAsiento) */
@@ -378,7 +359,7 @@ int guardar_datos(const CentroComercial* cc, const char* filename) {
         sqlite3_finalize(stmt);
     }
 
-    /* Confirmar transacción */
+
     if (!ejecutar_sql(db, "COMMIT;")) {
         ejecutar_sql(db, "ROLLBACK;");
         sqlite3_close(db);

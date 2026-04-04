@@ -6,11 +6,9 @@
 
 #define ARCHIVO_DATOS "deusto_centro_data.db"
 
-/* Rellena el centro comercial con datos de ejemplo y los guarda en la BD */
+// datos de ejemplo 
 static void cargar_datos_iniciales(CentroComercial* cc) {
     printf("Cargando datos iniciales de ejemplo...\n");
-
-    /* ---------- TIENDAS Y PRODUCTOS ---------- */
 
     Tienda* t1 = tienda_crear(1, "Zara");
     tienda_aniadirProducto(t1, producto_crear(101, "Camiseta Basica",   19.99,  50));
@@ -45,8 +43,6 @@ static void cargar_datos_iniciales(CentroComercial* cc) {
     tienda_aniadirProducto(t5, producto_crear(503, "Sapiens",    18.99, 25));
     cc_agregarTienda(cc, t5);
 
-    /* ---------- PELICULAS Y RESERVAS ---------- */
-
     Pelicula* p1 = pelicula_crear(1, "Dune: Parte Dos", 1, "17:00", 8, 10);
     pelicula_reservarAsiento(p1, 0, 0);
     pelicula_reservarAsiento(p1, 0, 1);
@@ -75,7 +71,7 @@ static void cargar_datos_iniciales(CentroComercial* cc) {
     pelicula_reservarAsiento(p4, 6, 5);
     cc_agregarPelicula(cc, p4);
 
-    /* Guardar todo en la BD */
+    // Guardar todo en la BD
     if (guardar_datos(cc, ARCHIVO_DATOS)) {
         printf("Datos iniciales guardados correctamente.\n");
     } else {
@@ -94,8 +90,6 @@ int main() {
         return 1;
     }
 
-    /* Si la BD ya existe y tiene datos, cargarlos.
-     * Si no, insertar datos de ejemplo. */
     if (cargar_datos(cc, ARCHIVO_DATOS) && cc->numTiendas > 0) {
         printf("Datos cargados correctamente desde '%s'.\n", ARCHIVO_DATOS);
     } else {
