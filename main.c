@@ -9,7 +9,7 @@
 #include "log.h"
 #include "sqlite3.h"
 
-/* Variable global leida por menu.c */
+
 const char* g_db_path = NULL;
 
 /* Variable global del usuario en sesión, leída por menu.c para logs */

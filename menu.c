@@ -1,11 +1,16 @@
 #include "menu.h"
 #include "persistencia.h"
+#include "log.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-/* Ruta de la BD — se inicializa desde main.c mediante g_db_path */
 extern const char* g_db_path;
+extern char g_usuario_sesion[50];
+
+static void menu_log(const char* accion) {
+    log_escribir(g_usuario_sesion, accion);
+}
 
 static void limpiar_pantalla() {
     system("cls"); 
@@ -41,7 +46,7 @@ static void mostrar_inventario(const Tienda* tienda) {
         printf("-------------------------------------------------\n");
         for (int i = 0; i < tienda->numProductos; i++) {
             Producto* p = tienda->inventario[i];
-            printf("%-8d %-20s €%-7.2f %d\n", 
+            printf("%-8d %-20s %.2f EUR %d\n", 
                    p->id, p->nombre, p->precio, p->stock);
         }
     }
@@ -54,14 +59,14 @@ void menu_principal(CentroComercial* cc) {
     do {
         limpiar_pantalla();
         printf("\n====================================================\n");
-        printf("   === BIENVENIDO AL SISTEMA DE GESTIÓN DEUSTO-CENTRO ===\n");
+        printf("   === BIENVENIDO AL SISTEMA DE GESTION DEUSTO-CENTRO ===\n");
         printf("====================================================\n");
         printf("1. Gestionar Tiendas\n");
         printf("2. Gestionar Inventario de Tienda\n");
         printf("3. Gestionar Cine\n");
         printf("4. Guardar y Salir\n");
         printf("====================================================\n");
-        printf("Seleccione una opción: ");
+        printf("Seleccione una opcion: ");
         
         scanf("%d", &opcion);
         while (getchar() != '\n');
@@ -85,7 +90,7 @@ void menu_principal(CentroComercial* cc) {
                 pausar();
                 break;
             default:
-                printf("\nOpción no válida.\n");
+                printf("\nOpcion no valida.\n");
                 pausar();
         }
     } while (opcion != 4);
@@ -97,8 +102,8 @@ void menu_gestion_tiendas(CentroComercial* cc) {
     do {
         limpiar_pantalla();
         mostrar_tiendas(cc);
-        printf("\n--- GESTIÓN DE TIENDAS ---\n");
-        printf("1. Añadir Tienda\n");
+        printf("\n--- GESTION DE TIENDAS ---\n");
+        printf("1. Anadir Tienda\n");
         printf("2. Eliminar Tienda\n");
         printf("3. Volver\n");
         printf("Seleccione: ");
@@ -111,7 +116,7 @@ void menu_gestion_tiendas(CentroComercial* cc) {
                 int id;
                 char nombre[100];
                 
-                printf("\n--- AÑADIR TIENDA ---\n");
+                printf("\n--- ANADIR TIENDA ---\n");
                 printf("ID de la Tienda: ");
                 scanf("%d", &id);
                 while (getchar() != '\n');
@@ -122,8 +127,8 @@ void menu_gestion_tiendas(CentroComercial* cc) {
                 
                 Tienda* tienda = tienda_crear(id, nombre);
                 if (tienda != NULL && cc_agregarTienda(cc, tienda)) {
-                    printf("\n¡Tienda '%s' añadida con éxito!\n", nombre);
-                    guardar_datos(cc, g_db_path);
+                    printf("\nTienda '%s' anadida con exito!\n", nombre);
+                    { char _b[128]; snprintf(_b,128,"TIENDA ANYADIDA id=%d %s",id,nombre); menu_log(_b); }
                 } else {
                     printf("\nError: Ya existe una tienda con ID %d o memoria insuficiente.\n", id);
                     if (tienda != NULL) tienda_liberar(tienda);
@@ -146,9 +151,9 @@ void menu_gestion_tiendas(CentroComercial* cc) {
                 
                 if (cc_eliminarTienda(cc, id)) {
                     printf("\nTienda eliminada correctamente.\n");
-                    guardar_datos(cc, g_db_path);
+                    { char _b[64]; snprintf(_b,64,"TIENDA ELIMINADA id=%d",id); menu_log(_b); }
                 } else {
-                    printf("\nError: No se encontró tienda con ID %d.\n", id);
+                    printf("\nError: No se encontro tienda con ID %d.\n", id);
                 }
                 pausar();
                 break;
@@ -156,7 +161,7 @@ void menu_gestion_tiendas(CentroComercial* cc) {
             case 3:
                 break;
             default:
-                printf("\nOpción no válida.\n");
+                printf("\nOpcion no valida.\n");
                 pausar();
         }
     } while (opcion != 3);
@@ -178,7 +183,7 @@ void menu_gestion_inventario(CentroComercial* cc) {
     
     Tienda* tienda = cc_buscarTiendaPorId(cc, idTienda);
     if (tienda == NULL) {
-        printf("\nError: No se encontró tienda con ID %d.\n", idTienda);
+        printf("\nError: No se encontro tienda con ID %d.\n", idTienda);
         pausar();
         return;
     }
@@ -187,8 +192,8 @@ void menu_gestion_inventario(CentroComercial* cc) {
     do {
         limpiar_pantalla();
         mostrar_inventario(tienda);
-        printf("\n--- GESTIÓN DE INVENTARIO - %s ---\n", tienda->nombre);
-        printf("1. Añadir Producto\n");
+        printf("\n--- GESTION DE INVENTARIO - %s ---\n", tienda->nombre);
+        printf("1. Anadir Producto\n");
         printf("2. Eliminar Producto\n");
         printf("3. Modificar Producto\n");
         printf("4. Volver\n");
@@ -203,7 +208,7 @@ void menu_gestion_inventario(CentroComercial* cc) {
                 char nombre[100];
                 float precio;
                 
-                printf("\n--- AÑADIR PRODUCTO ---\n");
+                printf("\n--- ANADIR PRODUCTO ---\n");
                 printf("ID del Producto: ");
                 scanf("%d", &id);
                 while (getchar() != '\n');
@@ -222,8 +227,9 @@ void menu_gestion_inventario(CentroComercial* cc) {
                 
                 Producto* producto = producto_crear(id, nombre, precio, stock);
                 if (producto != NULL && tienda_aniadirProducto(tienda, producto)) {
-                    printf("\n¡Producto '%s' añadido a la tienda '%s' con éxito!\n", 
+                    printf("\nProducto '%s' anadido a la tienda '%s' con exito!\n", 
                            nombre, tienda->nombre);
+                    { char _b[256]; snprintf(_b,256,"PRODUCTO ANYADIDO id=%d %s tienda=%s",id,nombre,tienda->nombre); menu_log(_b); }
                     guardar_datos(cc, g_db_path);
                 } else {
                     printf("\nError: Ya existe un producto con ID %d en esta tienda.\n", id);
@@ -247,9 +253,8 @@ void menu_gestion_inventario(CentroComercial* cc) {
                 
                 if (tienda_eliminarProducto(tienda, id)) {
                     printf("\nProducto eliminado correctamente.\n");
-                    guardar_datos(cc, g_db_path);
                 } else {
-                    printf("\nError: No se encontró producto con ID %d.\n", id);
+                    printf("\nError: No se encontro producto con ID %d.\n", id);
                 }
                 pausar();
                 break;
@@ -271,7 +276,7 @@ void menu_gestion_inventario(CentroComercial* cc) {
                 
                 Producto* producto = tienda_buscarProductoPorId(tienda, id);
                 if (producto == NULL) {
-                    printf("\nError: No se encontró producto con ID %d.\n", id);
+                    printf("\nError: No se encontro producto con ID %d.\n", id);
                     pausar();
                     break;
                 }
@@ -287,7 +292,7 @@ void menu_gestion_inventario(CentroComercial* cc) {
                 
                 if (tienda_modificarProducto(tienda, id, nuevoPrecio, nuevoStock)) {
                     printf("\nProducto modificado correctamente.\n");
-                    guardar_datos(cc, g_db_path);
+                    { char _b[128]; snprintf(_b,128,"PRODUCTO MODIFICADO id=%d precio=%.2f stock=%d",id,nuevoPrecio,nuevoStock); menu_log(_b); }
                 } else {
                     printf("\nError al modificar el producto.\n");
                 }
@@ -297,7 +302,7 @@ void menu_gestion_inventario(CentroComercial* cc) {
             case 4:
                 break;
             default:
-                printf("\nOpción no válida.\n");
+                printf("\nOpcion no valida.\n");
                 pausar();
         }
     } while (opcion != 4);
@@ -310,7 +315,7 @@ void menu_gestion_cine(CentroComercial* cc) {
         limpiar_pantalla();
         printf("\n========== CARTELERA ==========\n");
         if (cc->numPeliculas == 0) {
-            printf("No hay películas en cartelera.\n");
+            printf("No hay peliculas en cartelera.\n");
         } else {
             for (int i = 0; i < cc->numPeliculas; i++) {
                 Pelicula* p = cc->cartelera[i];
@@ -321,9 +326,9 @@ void menu_gestion_cine(CentroComercial* cc) {
         }
         printf("===============================\n");
         
-        printf("\n--- GESTIÓN DE CINE ---\n");
-        printf("1. Añadir Película\n");
-        printf("2. Eliminar Película\n");
+        printf("\n--- GESTION DE CINE ---\n");
+        printf("1. Anadir Pelicula\n");
+        printf("2. Eliminar Pelicula\n");
         printf("3. Reservar Asiento\n");
         printf("4. Ver Sala\n");
         printf("5. Volver\n");
@@ -337,16 +342,16 @@ void menu_gestion_cine(CentroComercial* cc) {
                 int id, sala, filas, columnas;
                 char titulo[200], horario[20];
                 
-                printf("\n--- AÑADIR PELÍCULA ---\n");
-                printf("ID de la Película: ");
+                printf("\n--- ANADIR PELICULA ---\n");
+                printf("ID de la Pelicula: ");
                 scanf("%d", &id);
                 while (getchar() != '\n');
                 
-                printf("Título: ");
+                printf("Titulo: ");
                 fgets(titulo, sizeof(titulo), stdin);
                 titulo[strcspn(titulo, "\n")] = '\0';
                 
-                printf("Número de Sala: ");
+                printf("Numero de Sala: ");
                 scanf("%d", &sala);
                 while (getchar() != '\n');
                 
@@ -354,20 +359,21 @@ void menu_gestion_cine(CentroComercial* cc) {
                 fgets(horario, sizeof(horario), stdin);
                 horario[strcspn(horario, "\n")] = '\0';
                 
-                printf("Número de Filas: ");
+                printf("Numero de Filas: ");
                 scanf("%d", &filas);
                 while (getchar() != '\n');
                 
-                printf("Número de Columnas: ");
+                printf("Numero de Columnas: ");
                 scanf("%d", &columnas);
                 while (getchar() != '\n');
                 
                 Pelicula* pelicula = pelicula_crear(id, titulo, sala, horario, filas, columnas);
                 if (pelicula != NULL && cc_agregarPelicula(cc, pelicula)) {
-                    printf("\n¡Película '%s' añadida a la cartelera con éxito!\n", titulo);
+                    printf("\nPelicula '%s' anadida a la cartelera con exito!\n", titulo);
+                    { char _b[256]; snprintf(_b,256,"PELICULA ANYADIDA id=%d sala=%d %s",id,sala,titulo); menu_log(_b); }
                     guardar_datos(cc, g_db_path);
                 } else {
-                    printf("\nError: Ya existe una película en la sala %d a las %s.\n", sala, horario);
+                    printf("\nError: Ya existe una pelicula en la sala %d a las %s.\n", sala, horario);
                     if (pelicula != NULL) pelicula_liberar(pelicula);
                 }
                 pausar();
@@ -375,42 +381,42 @@ void menu_gestion_cine(CentroComercial* cc) {
             }
             case 2: {
                 if (cc->numPeliculas == 0) {
-                    printf("\nNo hay películas para eliminar.\n");
+                    printf("\nNo hay peliculas para eliminar.\n");
                     pausar();
                     break;
                 }
                 
                 int id;
-                printf("\n--- ELIMINAR PELÍCULA ---\n");
-                printf("ID de la Película a eliminar: ");
+                printf("\n--- ELIMINAR PELICULA ---\n");
+                printf("ID de la Pelicula a eliminar: ");
                 scanf("%d", &id);
                 while (getchar() != '\n');
                 
                 if (cc_eliminarPelicula(cc, id)) {
-                    printf("\nPelícula eliminada correctamente.\n");
-                    guardar_datos(cc, g_db_path);
+                    printf("\nPelicula eliminada correctamente.\n");
+                    { char _b[64]; snprintf(_b,64,"PELICULA ELIMINADA id=%d",id); menu_log(_b); }
                 } else {
-                    printf("\nError: No se encontró película con ID %d.\n", id);
+                    printf("\nError: No se encontro pelicula con ID %d.\n", id);
                 }
                 pausar();
                 break;
             }
             case 3: {
                 if (cc->numPeliculas == 0) {
-                    printf("\nNo hay películas para reservar.\n");
+                    printf("\nNo hay peliculas para reservar.\n");
                     pausar();
                     break;
                 }
                 
                 int id, fila, columna;
                 printf("\n--- RESERVAR ASIENTO ---\n");
-                printf("ID de la Película: ");
+                printf("ID de la Pelicula: ");
                 scanf("%d", &id);
                 while (getchar() != '\n');
                 
                 Pelicula* pelicula = cc_buscarPeliculaPorId(cc, id);
                 if (pelicula == NULL) {
-                    printf("\nError: No se encontró película con ID %d.\n", id);
+                    printf("\nError: No se encontro pelicula con ID %d.\n", id);
                     pausar();
                     break;
                 }
@@ -424,29 +430,29 @@ void menu_gestion_cine(CentroComercial* cc) {
                 
                 if (pelicula_reservarAsiento(pelicula, fila - 1, columna - 1)) {
                     printf("\nAsiento (%d,%d) reservado correctamente.\n", fila, columna);
-                    guardar_datos(cc, g_db_path);
+                    { char _b[128]; snprintf(_b,128,"ASIENTO RESERVADO pelicula=%d fila=%d col=%d",id,fila,columna); menu_log(_b); }
                 } else {
-                    printf("\nError: Asiento ya ocupado o coordenadas inválidas.\n");
+                    printf("\nError: Asiento ya ocupado o coordenadas invalidas.\n");
                 }
                 pausar();
                 break;
             }
             case 4: {
                 if (cc->numPeliculas == 0) {
-                    printf("\nNo hay películas para visualizar.\n");
+                    printf("\nNo hay peliculas para visualizar.\n");
                     pausar();
                     break;
                 }
                 
                 int id;
                 printf("\n--- VER SALA ---\n");
-                printf("ID de la Película: ");
+                printf("ID de la Pelicula: ");
                 scanf("%d", &id);
                 while (getchar() != '\n');
                 
                 Pelicula* pelicula = cc_buscarPeliculaPorId(cc, id);
                 if (pelicula == NULL) {
-                    printf("\nError: No se encontró película con ID %d.\n", id);
+                    printf("\nError: No se encontro pelicula con ID %d.\n", id);
                     pausar();
                     break;
                 }
@@ -460,7 +466,7 @@ void menu_gestion_cine(CentroComercial* cc) {
             case 5:
                 break;
             default:
-                printf("\nOpción no válida.\n");
+                printf("\nOpcion no valida.\n");
                 pausar();
         }
     } while (opcion != 5);
