@@ -3,3 +3,30 @@
 [2026-04-04 21:47:30] lorena          LOGIN OK
 [2026-04-04 21:48:49] lorena          PRODUCTO ANYADIDO id=504 Crimen y Castigo tienda=Casa del Libro
 [2026-04-04 21:49:39] lorena          SESION CERRADA
+[2026-04-06 01:58:12] sistema         PROGRAMA INICIADO
+[2026-04-06 02:03:59] admin           LOGIN OK (admin)
+[2026-04-06 02:06:23] sistema         PROGRAMA INICIADO
+[2026-04-06 02:07:12] julen           REGISTRO OK
+[2026-04-06 02:09:14] lorena          LOGIN OK
+[2026-04-06 02:10:11] sistema         PROGRAMA INICIADO
+[2026-04-06 02:10:22] lorena          LOGIN FALLIDO
+[2026-04-06 02:10:40] lorena          LOGIN FALLIDO
+[2026-04-06 02:11:10] lorena          LOGIN FALLIDO
+[2026-04-06 02:37:26] Julen Ortiz Ramirez  LOGIN FALLIDO
+[2026-04-06 02:37:27]                 LOGIN FALLIDO
+[2026-04-06 02:37:28]                 LOGIN FALLIDO
+[2026-04-06 02:37:40] lorena          LOGIN OK
+[2026-04-06 02:38:43] lorena          SESION CERRADA
+[2026-04-06 02:41:03] sistema         PROGRAMA INICIADO
+[2026-04-06 02:41:14] lorena          LOGIN FALLIDO
+[2026-04-06 02:41:20] lorena          LOGIN OK
+[2026-04-06 02:44:29] lorena          TIENDA ANYADIDA id=6 Fnac
+[2026-04-06 02:45:36] lorena          TIENDA ELIMINADA id=6
+[2026-04-06 02:52:20] lorena          PRODUCTO ANYADIDO id=595 Crimen y Castigo tienda=Zara
+[2026-04-06 02:55:13] lorena          PRODUCTO MODIFICADO id=101 precio=17.00 stock=65
+[2026-04-06 03:01:56] lorena          PELICULA ANYADIDA id=5 sala=2 Alien Romulus
+[2026-04-06 03:03:03] lorena          PELICULA ELIMINADA id=5
+[2026-04-06 03:04:04] lorena          ASIENTO RESERVADO pelicula=1 fila=2 col=5
+[2026-04-06 03:32:09] lorena          SESION CERRADA
+[2026-04-06 03:32:30] sistema         PROGRAMA INICIADO
+[2026-04-06 03:32:34] sistema         PROGRAMA CERRADO
