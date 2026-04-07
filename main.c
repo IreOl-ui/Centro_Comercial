@@ -12,12 +12,10 @@
 
 const char* g_db_path = NULL;
 
-/* Variable global del usuario en sesión, leída por menu.c para logs */
 char g_usuario_sesion[50] = "sistema";
 
-/* ------------------------------------------------------------------ */
-/*  Datos iniciales de ejemplo                                          */
-/* ------------------------------------------------------------------ */
+// Datos iniciales de ejemplo 
+
 static void cargar_datos_iniciales(CentroComercial* cc, const char* db_path) {
     printf("Cargando datos iniciales de ejemplo...\n");
 
@@ -81,9 +79,7 @@ static void cargar_datos_iniciales(CentroComercial* cc, const char* db_path) {
         printf("Advertencia: no se pudieron guardar los datos iniciales.\n");
 }
 
-/* ------------------------------------------------------------------ */
-/*  Menú de sesión: Iniciar sesión / Registrarse / Salir               */
-/* ------------------------------------------------------------------ */
+// MENU
 static int menu_sesion(sqlite3* db, const Config* cfg, Usuario* usuario_out) {
     int opcion;
 
@@ -100,7 +96,7 @@ static int menu_sesion(sqlite3* db, const Config* cfg, Usuario* usuario_out) {
         while (getchar() != '\n');
 
         if (opcion == 1) {
-            /* --- LOGIN --- */
+            // Login
             char user[50], pass[50];
             int intentos = 0;
 
@@ -114,7 +110,7 @@ static int menu_sesion(sqlite3* db, const Config* cfg, Usuario* usuario_out) {
                 fgets(pass, sizeof(pass), stdin);
                 pass[strcspn(pass, "\r\n")] = '\0';
 
-                /* Primero comprobar credenciales de admin del config */
+                // Primero comprobar admin del config
                 if (strcmp(user, cfg->admin_user) == 0 &&
                     strcmp(pass, cfg->admin_pass) == 0) {
                     usuario_out->id = 0;
@@ -125,7 +121,7 @@ static int menu_sesion(sqlite3* db, const Config* cfg, Usuario* usuario_out) {
                     return 1;
                 }
 
-                /* Luego comprobar usuarios registrados en BD */
+                // Luego comprobar usuarios registrados en BD
                 if (usuario_login(db, user, pass, usuario_out)) {
                     printf("\nBienvenido, %s.\n", usuario_out->nombre);
                     log_escribir(user, "LOGIN OK");
@@ -141,7 +137,7 @@ static int menu_sesion(sqlite3* db, const Config* cfg, Usuario* usuario_out) {
             printf("Demasiados intentos fallidos.\n");
 
         } else if (opcion == 2) {
-            /* --- REGISTRO --- */
+            // Registro
             char user[50], pass[50], nombre[100];
 
             printf("\n--- REGISTRO DE USUARIO ---\n");
@@ -171,7 +167,7 @@ static int menu_sesion(sqlite3* db, const Config* cfg, Usuario* usuario_out) {
 
         } else if (opcion == 3) {
             log_escribir("sistema", "PROGRAMA CERRADO");
-            return 0;   /* salir del programa */
+            return 0;  
         } else {
             printf("Opcion no valida.\n");
         }
@@ -179,24 +175,22 @@ static int menu_sesion(sqlite3* db, const Config* cfg, Usuario* usuario_out) {
     } while (1);
 }
 
-/* ------------------------------------------------------------------ */
-/*  Main                                                                */
-/* ------------------------------------------------------------------ */
+// MAIN
 int main() {
     printf("\n====================================================\n");
     printf("       INICIANDO SISTEMA DEUSTO-CENTRO\n");
     printf("====================================================\n");
 
-    /* 1. Leer configuracion */
+    // Leer config
     Config cfg;
     config_cargar(&cfg, CONFIG_FILE);
     g_db_path = cfg.db_path;
 
-    /* 2. Iniciar log */
+    // Iniciar log
     log_init(cfg.log_path);
     log_escribir("sistema", "PROGRAMA INICIADO");
 
-    /* 3. Abrir BD y crear tabla de usuarios si no existe */
+    // Abrir BD y crear tabla de usuarios si no existe
     sqlite3* db = NULL;
     if (sqlite3_open(cfg.db_path, &db) != SQLITE_OK) {
         fprintf(stderr, "Error abriendo BD: %s\n", sqlite3_errmsg(db));
@@ -206,12 +200,12 @@ int main() {
     }
     usuario_crear_tabla(db);
 
-    /* 4. Menú de sesión */
+    // Menú de sesión
     Usuario usuario_activo;
     memset(&usuario_activo, 0, sizeof(Usuario));
 
     if (!menu_sesion(db, &cfg, &usuario_activo)) {
-        /* El usuario eligió Salir */
+        // Opción de Salir
         sqlite3_close(db);
         log_cerrar();
         printf("\n====================================================\n");
@@ -220,10 +214,10 @@ int main() {
         return 0;
     }
 
-    /* Guardar usuario en sesión para que menu.c pueda logarlo */
+    // Guardar usuario en sesión para que menu.c pueda logarlo
     strncpy(g_usuario_sesion, usuario_activo.username, 49);
 
-    /* 5. Inicializar centro comercial */
+    // Inicializar centro comercial
     CentroComercial* cc = cc_crear();
     if (cc == NULL) {
         fprintf(stderr, "Error critico inicializando centro comercial.\n");
@@ -232,7 +226,7 @@ int main() {
         return 1;
     }
 
-    /* 6. Cargar datos (o insertar ejemplos si es la primera vez) */
+    // Cargar datos (o insertar ejemplos si es la primera vez)
     if (cargar_datos(cc, cfg.db_path) && cc->numTiendas > 0) {
         printf("Datos cargados desde '%s'.\n", cfg.db_path);
     } else {
@@ -243,10 +237,10 @@ int main() {
     printf("\nPresione Enter para continuar...");
     getchar();
 
-    /* 7. Menú principal */
+    // Menú principal 
     menu_principal(cc);
 
-    /* 8. Limpieza */
+    // Cerrar
     log_escribir(g_usuario_sesion, "SESION CERRADA");
     cc_liberar(cc);
     sqlite3_close(db);
