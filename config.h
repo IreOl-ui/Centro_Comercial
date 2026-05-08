@@ -9,6 +9,7 @@ typedef struct {
     char db_path[256];
     char log_path[256];
     int  max_intentos;
+    int  server_port;   /* Puerto del servidor — leído de config.txt */
 } Config;
 
 int  config_cargar(Config* cfg, const char* filename);

@@ -33,3 +33,19 @@
 [2026-04-07 12:59:44] sistema         PROGRAMA INICIADO
 [2026-04-07 12:59:58] lorena          LOGIN OK
 [2026-04-07 13:15:37] lorena          SESION CERRADA
+[2026-05-08 13:13:30] sistema         SERVIDOR INICIADO
+[2026-05-08 13:13:30] sistema         Escuchando conexiones
+[2026-05-08 13:13:59] sistema         SERVIDOR INICIADO
+[2026-05-08 13:13:59] sistema         Escuchando conexiones
+[2026-05-08 13:15:30] sistema         SERVIDOR INICIADO
+[2026-05-08 13:15:30] sistema         Escuchando conexiones
+[2026-05-08 13:16:08] servidor        Cliente conectado
+[2026-05-08 13:16:51] servidor        LOGIN|admin|1234
+[2026-05-08 13:16:51] admin           LOGIN OK
+[2026-05-08 13:17:18] servidor        GET_TIENDAS
+[2026-05-08 13:17:29] servidor        GET_CARTELERA
+[2026-05-08 13:19:46] servidor        LOGOUT
+[2026-05-08 13:19:46] admin           LOGOUT
+[2026-05-08 13:19:51] servidor        EXIT
+[2026-05-08 13:19:51] ?               DESCONEXION
+[2026-05-08 13:19:51] servidor        Cliente desconectado

@@ -9,6 +9,7 @@ void config_defaults(Config* cfg) {
     strcpy(cfg->db_path,    "deusto_centro_data.db");
     strcpy(cfg->log_path,   "deusto_centro.log");
     cfg->max_intentos = 3;
+    cfg->server_port  = 8080;
 }
 
 int config_cargar(Config* cfg, const char* filename) {
@@ -33,6 +34,7 @@ int config_cargar(Config* cfg, const char* filename) {
         else if (strcmp(clave, "DB_PATH")      == 0) strncpy(cfg->db_path,    valor, 255);
         else if (strcmp(clave, "LOG_PATH")     == 0) strncpy(cfg->log_path,   valor, 255);
         else if (strcmp(clave, "MAX_INTENTOS") == 0) cfg->max_intentos = atoi(valor);
+        else if (strcmp(clave, "SERVER_PORT")  == 0) cfg->server_port  = atoi(valor);
     }
 
     fclose(f);
