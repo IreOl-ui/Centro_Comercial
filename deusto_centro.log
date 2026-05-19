@@ -83,3 +83,59 @@
 [2026-05-19 12:20:47] servidor        EXIT
 [2026-05-19 12:20:47] ?               DESCONEXION
 [2026-05-19 12:20:47] servidor        Cliente desconectado
+[2026-05-19 12:25:53] sistema         SERVIDOR INICIADO
+[2026-05-19 12:25:53] sistema         Escuchando conexiones
+[2026-05-19 12:25:58] servidor        Cliente conectado
+[2026-05-19 12:26:04] servidor        LOGIN|admin|1234
+[2026-05-19 12:26:04] admin           LOGIN OK
+[2026-05-19 12:26:24] servidor        LOGOUT
+[2026-05-19 12:26:24] admin           LOGOUT
+[2026-05-19 12:26:30] servidor        LOGIN|irene|1234
+[2026-05-19 12:26:30] irene           LOGIN OK
+[2026-05-19 12:36:10] servidor        GET_TIENDAS
+[2026-05-19 12:36:56] servidor        Cliente desconectado
+[2026-05-19 12:37:03] servidor        Cliente conectado
+[2026-05-19 12:37:09] servidor        LOGIN|irene|1234
+[2026-05-19 12:37:09] irene           LOGIN OK
+[2026-05-19 12:37:11] servidor        GET_TIENDAS
+[2026-05-19 12:37:31] servidor        ADD_TIENDA|6|Adidas
+[2026-05-19 12:37:31] irene           TIENDA ANYADIDA id=6
+[2026-05-19 12:37:31] servidor        GET_TIENDAS
+[2026-05-19 12:38:41] servidor        DEL_TIENDA|7
+[2026-05-19 12:38:41] servidor        GET_TIENDAS
+[2026-05-19 12:39:22] servidor        DEL_TIENDA|6
+[2026-05-19 12:39:22] irene           TIENDA ELIMINADA id=6
+[2026-05-19 12:39:22] servidor        GET_TIENDAS
+[2026-05-19 12:40:38] servidor        ADD_TIENDA|1|Zara
+[2026-05-19 12:40:38] servidor        GET_TIENDAS
+[2026-05-19 12:41:47] servidor        GET_PRODUCTOS|1
+[2026-05-19 12:42:27] servidor        ADD_PRODUCTO|101|1|Camiseta Basica|17.00|65
+[2026-05-19 12:43:12] servidor        ADD_PRODUCTO|666|1|Asi es la puta vida|28.50|57
+[2026-05-19 12:43:12] irene           PRODUCTO ANYADIDO id=666 Asi es la puta vida
+[2026-05-19 12:43:34] servidor        GET_PRODUCTOS|1
+[2026-05-19 12:45:05] servidor        ADD_PRODUCTO|111|1|Rubius. Jap¢n 2009|20.80|100
+[2026-05-19 12:45:05] irene           PRODUCTO ANYADIDO id=111 Rubius. Jap¢n 2009
+[2026-05-19 12:45:07] servidor        GET_PRODUCTOS|1
+[2026-05-19 12:45:13] servidor        DEL_PRODUCTO|1|111
+[2026-05-19 12:45:13] irene           PRODUCTO ELIMINADO id=111
+[2026-05-19 12:45:35] servidor        GET_PRODUCTOS|1
+[2026-05-19 12:46:03] servidor        MOD_PRODUCTO|1|666|27.37|69
+[2026-05-19 12:46:03] irene           PRODUCTO MODIFICADO id=666 precio=27.37 stock=69
+[2026-05-19 12:46:28] servidor        GET_PRODUCTOS|1
+[2026-05-19 12:46:57] servidor        GET_CARTELERA
+[2026-05-19 12:48:47] servidor        ADD_PELICULA|5|HUMINT|4|19:45|7|8
+[2026-05-19 12:48:47] irene           PELICULA ANYADIDA id=5 HUMINT
+[2026-05-19 12:48:47] servidor        GET_CARTELERA
+[2026-05-19 12:49:32] servidor        DEL_PELICULA|5
+[2026-05-19 12:49:32] irene           PELICULA ELIMINADA id=5
+[2026-05-19 12:49:32] servidor        GET_CARTELERA
+[2026-05-19 12:50:09] servidor        GET_SALA|1
+[2026-05-19 12:50:15] servidor        RESERVAR|1|4|3
+[2026-05-19 12:50:15] irene           ASIENTO RESERVADO pelicula=1 fila=4 col=3
+[2026-05-19 12:51:10] servidor        GET_SALA|1
+[2026-05-19 12:51:30] servidor        GET_SALA|3
+[2026-05-19 12:51:42] servidor        LOGOUT
+[2026-05-19 12:51:42] irene           LOGOUT
+[2026-05-19 12:51:46] servidor        EXIT
+[2026-05-19 12:51:46] ?               DESCONEXION
+[2026-05-19 12:51:46] servidor        Cliente desconectado
