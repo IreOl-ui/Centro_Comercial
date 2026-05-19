@@ -49,3 +49,11 @@
 [2026-05-08 13:19:51] servidor        EXIT
 [2026-05-08 13:19:51] ?               DESCONEXION
 [2026-05-08 13:19:51] servidor        Cliente desconectado
+[2026-05-19 11:49:04] sistema         SERVIDOR INICIADO
+[2026-05-19 11:49:04] sistema         Escuchando conexiones
+[2026-05-19 11:50:00] sistema         SERVIDOR INICIADO
+[2026-05-19 11:50:00] sistema         Escuchando conexiones
+[2026-05-19 11:50:07] servidor        Cliente conectado
+[2026-05-19 11:50:12] servidor        EXIT
+[2026-05-19 11:50:12] ?               DESCONEXION
+[2026-05-19 11:50:12] servidor        Cliente desconectado
