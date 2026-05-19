@@ -57,3 +57,29 @@
 [2026-05-19 11:50:12] servidor        EXIT
 [2026-05-19 11:50:12] ?               DESCONEXION
 [2026-05-19 11:50:12] servidor        Cliente desconectado
+[2026-05-19 11:59:51] sistema         SERVIDOR INICIADO
+[2026-05-19 11:59:52] sistema         Escuchando conexiones
+[2026-05-19 12:01:29] sistema         SERVIDOR INICIADO
+[2026-05-19 12:01:29] sistema         Escuchando conexiones
+[2026-05-19 12:01:33] servidor        Cliente conectado
+[2026-05-19 12:04:40] servidor        LOGIN|Irene|1234
+[2026-05-19 12:04:40] Irene           LOGIN FALLIDO
+[2026-05-19 12:07:43] servidor        LOGIN|Admin|1234
+[2026-05-19 12:07:43] Admin           LOGIN FALLIDO
+[2026-05-19 12:08:45] servidor        EXIT
+[2026-05-19 12:08:45] ?               DESCONEXION
+[2026-05-19 12:08:45] servidor        Cliente desconectado
+[2026-05-19 12:09:58] sistema         SERVIDOR INICIADO
+[2026-05-19 12:09:58] sistema         Escuchando conexiones
+[2026-05-19 12:11:04] servidor        Cliente conectado
+[2026-05-19 12:12:27] servidor        EXIT
+[2026-05-19 12:12:27] ?               DESCONEXION
+[2026-05-19 12:12:27] servidor        Cliente desconectado
+[2026-05-19 12:13:59] servidor        Cliente conectado
+[2026-05-19 12:14:09] servidor        LOGIN|Lorena|1234
+[2026-05-19 12:14:09] Lorena          LOGIN FALLIDO
+[2026-05-19 12:20:09] servidor        LOGIN|Maria|12234
+[2026-05-19 12:20:09] Maria           LOGIN FALLIDO
+[2026-05-19 12:20:47] servidor        EXIT
+[2026-05-19 12:20:47] ?               DESCONEXION
+[2026-05-19 12:20:47] servidor        Cliente desconectado
